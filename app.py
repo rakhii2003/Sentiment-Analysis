@@ -9,11 +9,12 @@ app = Flask(__name__)
 @app.route('/')
 def home():
     return render_template('index.html')
-@app.route('/analysis')
-def analysis():
-    return render_template('analysis.html')
 
-@app.route('/analyze-text', methods=['POST'])
+# @app.route('/analysis')
+# def analysis():
+#     return render_template('analysis.html')
+
+@app.route('/analyze-text', methods=['GET','POST'])
 def analyze_text():
     text = request.form.get('text')
     polarity, subjectivity = None, None
@@ -23,15 +24,15 @@ def analyze_text():
         subjectivity = round(blob.sentiment.subjectivity, 2)
     return render_template('analyze-text.html', polarity=polarity, subjectivity=subjectivity)
 
-@app.route('/clean_text', methods=['POST'])
+@app.route('/clean-text', methods=['GET','POST'])
 def clean_text():
     pre = request.form.get('pre')
     cleaned_text = None
     if pre:
         cleaned_text = cleantext.clean(pre, clean_all=False, extra_spaces=True, stopwords=True, lowercase=True, numbers=True, punct=True)
-    return render_template('analysis.html', cleaned_text=cleaned_text)
+    return render_template('clean-text.html', cleaned_text=cleaned_text)
 
-@app.route('/analyze_csv', methods=['POST'])
+@app.route('/analyze-csv', methods=['GET','POST'])
 def analyze_csv():
     uploaded_file = request.files.get('file')
     if uploaded_file:
@@ -66,11 +67,11 @@ def analyze_csv():
         csv_data = output.getvalue()
 
         # Pass the table HTML and CSV data to the template
-        return render_template('analysis.html', table_html=table_html, csv_data=csv_data)
+        return render_template('analyze-csv.html', table_html=table_html, csv_data=csv_data)
 
-    return render_template('analysis.html')
+    return render_template('analyze-csv.html')
 
-@app.route('/download_csv', methods=['POST'])
+@app.route('/download_csv', methods=['GET','POST'])
 def download_csv():
     csv_data = request.form.get('csv_data')
     if csv_data:
@@ -80,7 +81,7 @@ def download_csv():
             as_attachment=True,
             download_name='sentiment.csv'
         )
-    return render_template('analysis.html')
+    return render_template('analyze-csv.html')
 
-if __name__ == '_main_':
+if __name__ == '__main__':
     app.run(debug=True)

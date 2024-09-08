@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="mx-auto py-5">
+    <h1 class="text-3xl font-bold text-center mb-4">Twitter Sentiment Analysis</h1>
+
+    <!-- Text Analysis Section -->
+    <h3 class="text-xl font-semibold mb-3">Analyze Text</h3>
+    <form method="POST">
+        <div class="mb-3">
+            <input type="text"
+                class="form-input w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                name="text" placeholder="Enter text here">
+        </div>
+        <button type="submit"
+            class="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500">Analyze</button>
+    </form>
+
+    {% if polarity is not none and subjectivity is not none %}
+    <div class="mt-4 p-4 bg-blue-100 border border-blue-300 rounded-md text-blue-700">
+        <p><strong>Polarity:</strong> {{ polarity }}</p>
+        <p><strong>Subjectivity:</strong> {{ subjectivity }}</p>
+    </div>
+    {% endif %}
+</div>
+
+{% endblock %}
+{% block js %}
+<script>
+
+</script>
+{% endblock %}
+{% block css %}
+<style>
+
+</style>
+{% endblock %}
+{% block head %}{% endblock %}
