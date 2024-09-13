@@ -1,37 +1,64 @@
 {% extends 'base.html' %}
 {% block content %}
-<div class="mx-auto py-5">
-    <h1 class="text-3xl font-bold text-center mb-4">Twitter Sentiment Analysis</h1>
-
+<div class="min-h-screen flex items-center justify-center py-10">
     <!-- Text Analysis Section -->
-    <h3 class="text-xl font-semibold mb-3">Analyze Text</h3>
-    <form method="POST">
-        <div class="mb-3">
-            <input type="text"
-                class="form-input w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-                name="text" placeholder="Enter text here">
+    <div class="max-w-lg w-full bg-white bg-opacity-30 backdrop-blur-lg border border-gray-200 p-8 rounded-lg shadow-2xl transform transition-all duration-300 hover:scale-100">
+        <h3 class="text-3xl font-extrabold mb-4 text-white text-center">📊 Twitter Sentiment Analysis</h3>
+        <p class="text-gray-200 mb-6 text-center">Analyze the sentiment of your text and get insights on polarity and subjectivity.</p>
+        <form method="POST" class="space-y-4">
+            <div class="relative">
+                <input type="text" name="text" placeholder="Enter text to analyze"
+                    class="form-input w-full px-4 py-3 border border-transparent bg-opacity-80 rounded-full shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-400 transition duration-200 ease-in-out" required>
+                <svg class="w-5 h-5 absolute top-1/2 right-4 transform -translate-y-1/2 text-gray-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                </svg>
+            </div>
+            <button type="submit"
+                class="w-full bg-gradient-to-r from-blue-500 to-indigo-500 text-white font-semibold px-5 py-3 rounded-full shadow-lg hover:bg-gradient-to-l hover:from-indigo-500 hover:to-blue-500 transition duration-300 ease-in-out transform hover:scale-105">
+                ✨ Analyze Text
+            </button>
+        </form>
+
+        {% if polarity is not none and subjectivity is not none %}
+        <div class="mt-6 p-4 bg-blue-50 bg-opacity-80 backdrop-blur-sm border border-blue-200 rounded-lg shadow-lg text-blue-700 text-center">
+            <p class="text-lg font-medium"><strong>Polarity:</strong></p>
+            <p class="mt-2 text-gray-800">{{ polarity }}</p>
+            <p class="text-lg font-medium mt-4"><strong>Subjectivity:</strong></p>
+            <p class="mt-2 text-gray-800">{{ subjectivity }}</p>
         </div>
-        <button type="submit"
-            class="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500">Analyze</button>
-    </form>
-
-    {% if polarity is not none and subjectivity is not none %}
-    <div class="mt-4 p-4 bg-blue-100 border border-blue-300 rounded-md text-blue-700">
-        <p><strong>Polarity:</strong> {{ polarity }}</p>
-        <p><strong>Subjectivity:</strong> {{ subjectivity }}</p>
+        {% endif %}
     </div>
-    {% endif %}
 </div>
-
 {% endblock %}
-{% block js %}
-<script>
 
-</script>
-{% endblock %}
 {% block css %}
 <style>
+    body {
+        background-image: url('https://cdn.pixabay.com/animation/2023/06/26/03/02/03-02-03-917_512.gif');
+        background-size: cover;
+        background-attachment: fixed;
+        font-family: 'Poppins', sans-serif;
+    }
 
+    .form-input::placeholder {
+        color: #d1d5db; /* A light gray for placeholder */
+        font-style: italic;
+    }
+
+    .form-input {
+        background-color: rgba(255, 255, 255, 0.15); /* Transparent for glassmorphism effect */
+    }
+
+    .rounded-full {
+        border-radius: 9999px;
+    }
+
+    .backdrop-blur-lg {
+        backdrop-filter: blur(12px); /* Frosted glass effect */
+    }
+
+    .shadow-2xl {
+        box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25); /* Enhance the shadow for more depth */
+    }
 </style>
 {% endblock %}
-{% block head %}{% endblock %}
