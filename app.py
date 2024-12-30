@@ -17,12 +17,13 @@ def home():
 @app.route('/analyze-text', methods=['GET','POST'])
 def analyze_text():
     text = request.form.get('text')
-    polarity, subjectivity = None, None
+    polarity, sentiment = None, None
     if text:
         blob = TextBlob(text)
         polarity = round(blob.sentiment.polarity, 2)
-        subjectivity = round(blob.sentiment.subjectivity, 2)
-    return render_template('analyze-text.html', polarity=polarity, subjectivity=subjectivity)
+        sentiment = 'Positive' if polarity > 0 else 'Negative' if polarity < 0 else 'Neutral'
+        #subjectivity = round(blob.sentiment.subjectivity, 2)
+    return render_template('analyze-text.html', sentiment=sentiment)
 
 @app.route('/clean-text', methods=['GET','POST'])
 def clean_text():
@@ -52,10 +53,20 @@ def analyze_csv():
                 return 'Negative'
             else:
                 return 'Neutral'
+            
+        # Apply the functions to the DataFrame
+        # if the column name is 'Text'
+        if 'Text' in df.columns:
+            df['Sentiment'] = df['Text'].apply(lambda x: analyze(score(x)))
+        # if the column name is 'tweet'
+        elif 'tweet' in df.columns:
+            df['Sentiment'] = df['tweet'].apply(lambda x: analyze(score(x)))
+        # if the column name is anything else in object type
+        else:
+            for col in df.select_dtypes(include='object').columns:
+                df['Sentiment'] = df[col].apply(lambda x: analyze(score(x)))
+                break
 
-        # Apply score and analysis functions
-        df['score'] = df['tweet'].apply(score)
-        df['analysis'] = df['score'].apply(analyze)
 
         # Convert the DataFrame to HTML
         table_html = df.to_html(classes='dataframe table table-striped', index=False)
